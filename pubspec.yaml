@@ -1,0 +1,44 @@
+name: iTen
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  vibration: ^3.1.4
+  dio: ^5.9.0
+  shared_preferences: ^2.5.3
+  qr_flutter: ^4.1.0
+  barcode_scan2: ^4.5.1
+  connectivity_plus: ^5.0.2
+  speech_to_text: ^7.3.0
+  permission_handler: ^12.0.1
+  file_picker: ^10.3.7
+  path_provider: ^2.1.5
+  share_plus: ^12.0.1
+  package_info_plus: ^9.0.0
+  rename: ^3.1.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/image/
+    - assets/image/client/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/client/logo1.png"
+  adaptive_icon_foreground: "assets/image/client/logo.png"
+  # image_path: "assets/image/Logo_transparent.png"
+  # adaptive_icon_foreground: "assets/image/logo2.png"
+  adaptive_icon_background: "#FFFFFF"
