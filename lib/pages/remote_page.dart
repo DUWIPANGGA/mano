@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:iTen/constants/app_colors.dart';
 import 'package:iTen/services/socket_service.dart';
 import 'package:iTen/services/voice_recognition_service.dart';
+import 'package:iTen/services/wake_word_service.dart';
 
 class RemotePage extends StatefulWidget {
   final SocketService socketService;
@@ -16,8 +17,10 @@ class RemotePage extends StatefulWidget {
 
 class _RemotePageState extends State<RemotePage> {
   final VoiceRecognitionService _voiceService = VoiceRecognitionService();
+  final WakeWordService _wakeWordService = WakeWordService();
   final FlutterTts _tts = FlutterTts();
   bool _isVoiceListening = false;
+  bool _isWakeWordEnabled = false;
 
   final Map<String, bool> _buttonsState = {
     'Auto ABCD': false,
@@ -46,6 +49,7 @@ class _RemotePageState extends State<RemotePage> {
   void initState() {
     super.initState();
     _initTts();
+    _initWakeWord();
 
     // Listen untuk messages dari socket
     widget.socketService.messages.listen((message) {
@@ -59,6 +63,13 @@ class _RemotePageState extends State<RemotePage> {
     _voiceService.listeningState.listen((listening) {
       setState(() { _isVoiceListening = listening; });
     });
+
+    // Listen untuk wake word detection
+    _wakeWordService.keywordDetected.listen((detected) {
+      if (detected) {
+        _onWakeWordDetected();
+      }
+    });
   }
 
   Future<void> _initTts() async {
@@ -66,6 +77,31 @@ class _RemotePageState extends State<RemotePage> {
     await _tts.setSpeechRate(0.5);
     await _tts.setVolume(1.0);
     await _tts.setPitch(1.0);
+  }
+
+  Future<void> _initWakeWord() async {
+    await _wakeWordService.initialize();
+  }
+
+  void _onWakeWordDetected() {
+    print('🎯 Wake word detected! Responding...');
+    _speak('Iya bos');
+    
+    // Start listening for command after wake word
+    Future.delayed(Duration(milliseconds: 500), () {
+      _voiceService.startListening();
+    });
+  }
+
+  void _toggleWakeWord() {
+    setState(() {
+      _isWakeWordEnabled = !_isWakeWordEnabled;
+      if (_isWakeWordEnabled) {
+        _wakeWordService.startListening();
+      } else {
+        _wakeWordService.stopListening();
+      }
+    });
   }
 
   Future<void> _speak(String text) async {
@@ -147,6 +183,7 @@ class _RemotePageState extends State<RemotePage> {
   void dispose() {
     _tts.stop();
     _voiceService.dispose();
+    _wakeWordService.dispose();
     super.dispose();
   }
 
@@ -458,7 +495,30 @@ class _RemotePageState extends State<RemotePage> {
                   ),
                 ),
 
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
+
+                // Wake Word Toggle
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: _isWakeWordEnabled ? AppColors.neonGreen : AppColors.darkGrey,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.neonGreen),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      _isWakeWordEnabled ? Icons.record_voice_over : Icons.voice_over_off,
+                      color: _isWakeWordEnabled ? AppColors.primaryBlack : AppColors.neonGreen,
+                    ),
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      _toggleWakeWord();
+                    },
+                  ),
+                ),
+
+                const SizedBox(width: 8),
 
                 // Mic (Voice Recognition)
                 Container(
