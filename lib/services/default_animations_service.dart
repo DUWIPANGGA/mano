@@ -183,6 +183,79 @@ static const List<Map<String, dynamic>> _defaultAnimationsData = [
     'delayData': '60',
     'frameData': [],
   },
+  // DIUBAH
+  {
+    'name': 'Animation 20 - Orbit Sweep',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'O pattern left-right animation',
+    'delayData': '100',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 21 - Orbit Slide',
+    'channelCount': 4,
+    'animationLength': 8,
+    'description': 'O pattern left-right simplified',
+    'delayData': '80',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 22 - Orbit Expand',
+    'channelCount': 4,
+    'animationLength': 12,
+    'description': 'O pattern outward animation',
+    'delayData': '120',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 23 - Line Sweeper',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'Sweeping animation effect',
+    'delayData': '100',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 24 - Pulse In Out',
+    'channelCount': 4,
+    'animationLength': 8,
+    'description': 'In-out animation pattern',
+    'delayData': '80',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 25 - Vertical Bounce',
+    'channelCount': 4,
+    'animationLength': 12,
+    'description': 'Bouncing animation effect',
+    'delayData': '120',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 26 - Horizontal Bounce',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'Left-right bouncing animation',
+    'delayData': '100',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 27 - Bounce Blink',
+    'channelCount': 4,
+    'animationLength': 8,
+    'description': 'Bouncing with blinking effect',
+    'delayData': '80',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 28 - Core Fill',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'Fill in animation pattern',
+    'delayData': '100',
+    'frameData': [],
+  },
   // X (BIARIN)
   {
     'name': 'Animation 29 - X Swap',
@@ -190,6 +263,23 @@ static const List<Map<String, dynamic>> _defaultAnimationsData = [
     'animationLength': 8,
     'description': 'X pattern swap animation',
     'delayData': '80',
+    'frameData': [],
+  },
+  // DIUBAH
+  {
+    'name': 'Animation 30 - Fill Rightward',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'Right fill animation',
+    'delayData': '100',
+    'frameData': [],
+  },
+  {
+    'name': 'Animation 31 - Fill Downward',
+    'channelCount': 4,
+    'animationLength': 10,
+    'description': 'Downward fill animation',
+    'delayData': '100',
     'frameData': [],
   },
 ];
@@ -200,8 +290,8 @@ static const List<Map<String, dynamic>> _defaultAnimationsData = [
     try {
       final existingDefaults = await _preferencesService.getDefaultAnimations();
 
-      // Jika belum ada default animations, buat yang baru
-      if (existingDefaults.isEmpty) {
+      // Jika belum ada default animations atau count beda (update dari versi lama), buat yang baru
+      if (existingDefaults.isEmpty || existingDefaults.length != _defaultAnimationsData.length) {
         final defaultAnimations = _createDefaultAnimations();
         await _preferencesService.saveDefaultAnimations(defaultAnimations);
         print(

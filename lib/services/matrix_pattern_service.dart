@@ -8,41 +8,32 @@ class Point {
 }
 
 class MatrixPatternService {
-  // Calculate optimal grid size for X pattern display
   int calculateOptimalGridSize(int channelCount) {
-    final minSize = (channelCount / 2).ceil();
-    return minSize + 1; // Add some extra space
+    final size = (channelCount / 2).ceil();
+    return size < 2 ? 2 : size;
   }
 
-  // Generate X pattern positions (same as JavaScript implementation)
   List<Point> generateXPattern(int channelCount) {
     final List<Point> xPattern = [];
-    final totalChannels = channelCount;
-    final segment = totalChannels ~/ 4;
+    final gridSize = calculateOptimalGridSize(channelCount);
+    final mid = gridSize ~/ 2;
+    final segment = channelCount ~/ 4;
+    final offset = gridSize % 2;
 
-    // Same pattern as JavaScript: getCheckboxPositions()
     for (int i = 0; i < segment; i++) {
-      int x = i;
-      int y = i;
-      xPattern.add(Point(y, x));
+      xPattern.add(Point(i, i));
     }
 
     for (int i = 0; i < segment; i++) {
-      int x = segment - 1 - i;
-      int y = segment + 1 + i;
-      xPattern.add(Point(y, x));
+      xPattern.add(Point(mid - 1 - i, mid + offset + i));
     }
 
     for (int i = 0; i < segment; i++) {
-      int x = (totalChannels ~/ 2) - 1 - i;
-      int y = (totalChannels ~/ 2) - i;
-      xPattern.add(Point(y, x));
+      xPattern.add(Point(gridSize - 1 - i, gridSize - 1 - i));
     }
 
     for (int i = 0; i < segment; i++) {
-      int x = segment + i;
-      int y = segment - 1 - i;
-      xPattern.add(Point(y, x));
+      xPattern.add(Point(mid + offset + i, mid - 1 - i));
     }
 
     return xPattern;

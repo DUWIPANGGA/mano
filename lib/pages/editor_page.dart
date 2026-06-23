@@ -387,7 +387,14 @@ class _EditorPageState extends State<EditorPage> {
   void _playAnimation() {
     if (!_isPlaying) return;
 
-    Future.delayed(Duration(milliseconds: _playSpeed), () {
+    int frameDelayMultiplier = 4;
+    if (_delayData.length > _currentFrame) {
+      frameDelayMultiplier = int.tryParse(_delayData[_currentFrame]) ?? 4;
+    }
+    
+    int currentDelayMs = (_playSpeed * frameDelayMultiplier) ~/ 4;
+
+    Future.delayed(Duration(milliseconds: currentDelayMs), () {
       if (mounted && _isPlaying) {
         setState(() {
           _currentFrame = (_currentFrame + 1) % _animationLength;
@@ -1034,7 +1041,7 @@ Widget _buildMatrixEditor() {
             ),
         ],
       ),
-    );
+    );  
   }
 
   Widget _buildPerfectXLED(int row, int col, int gridSize, int frameIndex) {
